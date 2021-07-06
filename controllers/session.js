@@ -100,6 +100,7 @@ exports.adminRequired = (req, res, next) => {
         next();
     } else {
         console.log('Prohibited route: the logged in user is not an administrator.');
+        req.flash("info", "Para esta acción se require ser administrador");
         res.send(403);
     }
 };

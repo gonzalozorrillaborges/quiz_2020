@@ -5,6 +5,9 @@ const quizController = require('../controllers/quiz');
 const userController = require('../controllers/user');
 const sessionController = require('../controllers/session');
 
+//Se agrega el requiere del controller para grupos  ## ESTE ES UN CAMBIO REALIZADO POR GZ
+const groupController = require('../controllers/group');
+
 //-----------------------------------------------------------
 
 // Routes for the resource /login
@@ -81,12 +84,15 @@ function saveBack(req, res, next) {
 
 // Restoration routes are GET routes that do not end in:
 //   /new, /edit, /play, /check, /login or /:id.
+
+//SE AGREGO LA RUTA DE RESTAURACIÓN DE GROUPS
 router.get(
     [
         '/',
         '/author',
         '/users',
-        '/quizzes'
+        '/quizzes',
+        '/groups' 
     ],
     saveBack);
 
@@ -106,6 +112,9 @@ router.get('/author', (req, res, next) => {
 // Autoload for routes using :quizId
 router.param('quizId', quizController.load);
 router.param('userId', userController.load);
+
+// Autoload for routes using :groupId  ## ESTE ES UN CAMBIO REALIZADO POR GZ
+router.param('groupId', groupController.load);
 
 
 // Routes for the resource /users
@@ -176,6 +185,36 @@ router.delete('/quizzes/:quizId(\\d+)',
 
 router.get('/quizzes/:quizId(\\d+)/play',  quizController.play);
 router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
+
+
+// Rutas para el recurso /groups  ## ESTE ES UN CAMBIO REALIZADO POR GZ
+router.get('/groups',
+    groupController.index);
+router.get('/groups/new',
+    sessionController.loginRequired,
+    sessionController.adminRequired,    
+    groupController.new);
+router.post('/groups',
+    sessionController.loginRequired,
+    sessionController.adminRequired, 
+    groupController.create);
+router.get('/groups/:groupId(\\d+)/edit',
+    sessionController.loginRequired,
+    sessionController.adminRequired, 
+    groupController.edit);
+router.put('/groups/:groupId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminRequired, 
+    groupController.update);
+router.delete('/groups/:groupId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminRequired, 
+    groupController.destroy);
+
+ 
+//Rutas para randomplay (Jugar) para el recurso /groups  ## ESTE ES UN CAMBIO REALIZADO POR GZ
+router.get('/groups/:groupId(\\d+)/randomplay',  groupController.randomPlay);
+router.get('/groups/:groupId(\\d+)/randomcheck/:quizId(\\d+)', groupController.randomCheck);
 
 
 module.exports = router;

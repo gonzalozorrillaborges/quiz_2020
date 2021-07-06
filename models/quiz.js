@@ -1,4 +1,3 @@
-
 const {Model} = require('sequelize');
 
 // Definition of the Quiz model:

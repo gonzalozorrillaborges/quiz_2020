@@ -14,6 +14,9 @@ const sequelize = new Sequelize(url);
 // Import the definition of the Quiz Table from quiz.js
 const Quiz = sequelize.import(path.join(__dirname, 'quiz'));
 
+// Import the definition of the Group Table from group.js
+const Group = sequelize.import(path.join(__dirname, 'group'));
+
 // Import the definition of the Users Table from user.js
 const User = sequelize.import(path.join(__dirname,'user'));
 
@@ -24,6 +27,22 @@ sequelize.import(path.join(__dirname,'session'));
 // Relation 1-to-N between User and Quiz:
 User.hasMany(Quiz, {as: 'quizzes', foreignKey: 'authorId'});
 Quiz.belongsTo(User, {as: 'author', foreignKey: 'authorId'});
+
+
+// Relation N-to-N between Group and Quiz:
+Quiz.belongsToMany(Group, {
+    as: 'groups',
+    through: 'GroupQuizzes',
+    foreignKey: 'quizId',
+    otherKey: 'groupId'
+});
+
+Group.belongsToMany(Quiz, {
+    as: 'quizzes',
+    through: 'GroupQuizzes',
+    foreignKey: 'groupId',
+    otherKey: 'quizId'
+});
 
 
 module.exports = sequelize;

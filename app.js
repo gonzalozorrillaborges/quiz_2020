@@ -30,7 +30,7 @@ app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));  //SINTAXIS EXTENDIDA PARA RECIBIR PARÁMETROS EN HTML QUE SEAN ENVIADOS
 app.use(cookieParser());
 
 // Configuracion de la session para almacenarla en BBDD usando Sequelize.
